@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html>
+<head>
+   <meta charset="utf-8">
+   <meta name="viewport" content="width=device-width, initial-scale=1">
+   <title></title>
+</head>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400..700&display=swap');
+</style>
+<style type="text/css">
+
+@media screen and (max-width: 800px) {
+.recipe{
+width: fit-content;
+}
+.box{
+    margin: 10px;
+}
+}
+@media screen and (max-width: 320px) {
+.recipe{
+width: fit-content;
+}
+.box{
+    margin: 10px;
+}
+}
+@media screen and (max-width: 375px) {
+.recipe{
+width: fit-content;
+}
+.box{
+    margin: 10px;
+}
+}
+@media screen and (max-width: 425px) {
+.recipe{
+width: fit-content;
+}
+.box{
+    margin: 10px;
+}
+}
+
+body{
+    margin: 0px;
+    padding: 0px;
+}
+
+   .recipe-continer{
+      display: grid;
+      grid-template-columns: repeat(auto-fit,minmax(300px,1fr));
+      margin: 10px auto;
+      grid-gap: 40px;
+       flex-wrap: nowrap;
+       flex-shrink:0;
+
+   }
+   .recipe{
+     margin: 10px;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5);
+      border-radius: 300px;
+     display: flex;
+      flex-glow:1;
+      flex-shrink:0;
+      flex-wrap: nowrap;
+      align-items: center;
+
+
+   }
+   .m1{
+      display:flex;
+     
+   }
+.m4{
+   margin-left: 30px;
+   margin-bottom: 10px;
+   margin-top: 10px;
+   margin-right: 30px;
+     font-family: "Dancing Script", cursive;
+  font-optical-sizing: auto;
+  font-weight: 100;
+  font-style: normal;
+
+}
+   .box{
+    display:inline-flex;
+     width: 800px;
+       }
+#photo{
+   max-width: 300px;
+   max-height: 300px;
+   border-radius: 500px;
+    align-self: center;
+    display: block;
+}
+
+.column1, .column2 {
+    float: left;
+    margin-left: 10px;
+    
+}
+
+.o1{
+ justify-content: center;
+   margin-bottom: 0px;
+   margin-top: 0px;
+
+   align-self: flex-start;
+   font-size: 50px;   
+     font-family: "Dancing Script", cursive;
+  font-optical-sizing: auto;
+  font-weight: 500;
+  font-style: normal;
+}
+.o2{
+   margin-bottom: 0px;
+   margin-top: 0px;
+   align-self: flex-start;
+   font-size: 30px;   
+     font-family: "Dancing Script", cursive;
+  font-optical-sizing: auto;
+  font-weight: 400;
+  font-style: normal;
+}
+
+#p7{
+   margin: 0px;
+}
+</style>
+<body>
+   <header>
+      <div>  
+         <form>
+<input type="text" name="" class="search">
+     <button type="button" class="button1"> search</button>
+     </form>
+      </div>
+   </header>
+  
+      <main>
+         <section>
+<div  class="recipe-container">
+   
+</div>
+</section>
+</main>
+</body>
+<script type="text/javascript">
+    const searchBox = document.querySelector(".search");
+    const recipeContainer = document.querySelector(".recipe-container");
+    const searchBtn = document.querySelector(".button1");
+
+    const fetchRecipes = async (query) => {
+        const data = await fetch(`https://www.themealdb.com/api/json/v1/1/search.php?s=${query}`);
+        const response = await data.json();
+        console.log(response);
+
+        response.meals.forEach(meal=>{
+         const reacipeDiv=document.createElement('div');
+       reacipeDiv.classList.add('recipe');
+       
+      const fetchIngredients = (meal) => {
+    let ingredientsList = '<div class="column1">'; // Start with first column
+    for (let i = 1; i <= 20; i++) {
+        const ingredient = meal[`strIngredient${i}`];
+        if (ingredient) {
+            const measure = meal[`strMeasure${i}`];
+
+            if (i == 11) {
+                ingredientsList += '</div><div class="column2">'; // Close first div and start second
+            }
+
+            ingredientsList += `<div class="m1"><li>${measure} ${ingredient}</li></div>`;
+        } else {
+            break; // Stop if there's no more ingredient
+        }
+    }
+    ingredientsList += '</div>'; // Close the final div
+    return ingredientsList;
+};
+
+
+      
+         reacipeDiv.innerHTML=`
+         <div class="box">
+          <img id="photo" src="${meal.strMealThumb}">
+          
+         <div class="m4">
+         <h1 class="o1">${meal.strMeal}</h1>
+          <h4 class="o2">Ingredient&Measure</h4> 
+          <p id="p7">${fetchIngredients(meal)}</p>
+          
+
+           </div>    
+         </div>
+         `
+         recipeContainer.appendChild(reacipeDiv);
+        });
+        
+    };
+
+    searchBtn.addEventListener('click', (e) => {
+        e.preventDefault();
+        const searchInput = searchBox.value.trim();
+        fetchRecipes(searchInput);
+    });
+</script>
+
+</html>
